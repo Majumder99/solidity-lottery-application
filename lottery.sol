@@ -27,4 +27,14 @@ contract lottery{
         //you can encode with one string also
         return uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp, participants.length)));
     }
+    function nameOfWinner() public returns(address){
+        require(msg.sender == manager);
+        require(participants.length >= 3);
+        uint r = random();
+        address payable winner;
+        uint index = r % participants.length;
+        winner = participants[index];
+        winner.transfer(getBalance());
+        return winner;
+    }
 }
