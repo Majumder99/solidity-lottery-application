@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity >=0.5.0 <0.9.0;
 
 contract lottery{
     address public manager;
@@ -27,7 +27,7 @@ contract lottery{
         //you can encode with one string also
         return uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp, participants.length)));
     }
-    function nameOfWinner() public returns(address){
+    function setWinner() public {
         require(msg.sender == manager);
         require(participants.length >= 3);
         uint r = random();
@@ -35,6 +35,8 @@ contract lottery{
         uint index = r % participants.length;
         winner = participants[index];
         winner.transfer(getBalance());
-        return winner;
+        // reset the participants list
+        // now the participants will be zero
+        participants = new address payable[](0);
     }
 }
